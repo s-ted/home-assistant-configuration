@@ -1,0 +1,16 @@
+- name: Living room normal
+  entities:
+      light.living_room:
+          state: on
+          transition: 5
+          brightness: 150
+          xy_color: [ 0.4559, 0.4096 ]
+
+- name: Living room dim
+  entities:
+      light.living_room:
+          state: on
+          transition: 3
+          brightness: 90
+          xy_color: [ 0.5926, 0.3814 ]
+
