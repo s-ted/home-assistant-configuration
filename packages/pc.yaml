@@ -1,0 +1,31 @@
+homeassistant:
+        customize:
+                switch.pc_monitors:
+                        icon: mdi:monitor
+                        friendly_name: Monitors
+                switch.pc_sound:
+                        icon: mdi:volume-off
+                        friendly_name: Mute
+                        input_slider.pc_volume:
+                                icon: mdi:volume-high
+                switch.turn_on_pc:
+                        icon: mdi:power
+
+group:
+        Computer:
+                - switch.turn_on_pc
+                - input_slider.pc_volume
+                - switch.pc_sound
+                - switch.pc_monitors
+
+switch:
+        - platform: wake_on_lan
+          mac_address: !secret pc_mac_address
+          name: 'Turn On PC'
+          host: !secret pc_ip_address
+
+#automation:
+# TODO: start the PC at arrival
+# TODO: start the PC on morning
+# TODO: start the PC at night
+# TODO: start the PC at away

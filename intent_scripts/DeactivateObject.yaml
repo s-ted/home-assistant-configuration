@@ -1,0 +1,6 @@
+DeactivateObject:
+  action:
+    - service: light.turn_off
+      data_template:
+        entity_id: light.{{ objectLocation | replace(" ", "_") | capitalize() }}
+        transition: 2

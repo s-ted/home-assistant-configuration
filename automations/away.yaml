@@ -1,0 +1,15 @@
+- alias: Away
+  trigger:
+    - platform: state
+      entity_id: group.all_devices
+      to: 'not_home'
+      from: 'home'
+  action:
+    - service: media_player.media_stop
+      entity_id: media_player.kodi
+    - service: light.turn_off
+      entity_id: group.all_lights
+    - service: notify.html5_nexus5
+      data:
+        title: "Plus personne n'est a la maison"
+        message: "... j'ai tout eteint."

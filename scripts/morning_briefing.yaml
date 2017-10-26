@@ -1,0 +1,11 @@
+morning_briefing:
+  alias: Morning briefing
+  sequence:
+    - service: notify.html5_aktivo
+      data_template:
+        message: !include ../templates/morning_briefing.yaml
+    - service: tts.google_say
+      entity_id: media_player.mpd
+      data_template:
+        cache: false
+        message: !include ../templates/morning_briefing.yaml

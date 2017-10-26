@@ -1,0 +1,126 @@
+- alias: Switch on lights when it get's darker 
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.living_room_lux
+    below: 6000
+  - platform: time
+    minutes: '/2'
+    seconds: 0
+  condition:
+  - condition: numeric_state
+    entity_id: sensor.living_room_lux
+    below: 6000
+  - condition: state
+    entity_id: group.all_devices
+    state: 'home'
+  - condition: state
+    entity_id: input_boolean.sleeping
+    state: 'off'
+  - condition: state
+    entity_id: light.living_room
+    state: 'off'
+  action:
+    - service: light.turn_on
+      entity_id: light.living_room 
+      data:
+        brightness: 125
+        kelvin: 3500
+        transition: 10
+
+
+
+
+- alias: Increase lights when it get's darker 
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.living_room_lux
+    below: 6000
+  - platform: time
+    minutes: '/2'
+    seconds: 0
+  condition:
+  - condition: numeric_state
+    entity_id: sensor.living_room_lux
+    below: 6000
+  - condition: state
+    entity_id: group.all_devices
+    state: 'home'
+  - condition: state
+    entity_id: input_boolean.sleeping
+    state: 'off'
+  - condition: numeric_state
+    entity_id: light.living_room
+    value_template: '{{ states.light.living_room.attributes.brightness }}'
+    below: 245
+  - condition: state
+    entity_id: media_player.kodi
+    state: 'idle'
+  action:
+    - service: light.turn_on
+      entity_id: light.living_room 
+      data_template:
+        brightness: '{{states.light.living_room.attributes.brightness + 10}}'
+        transition: 60
+
+
+
+
+- alias: Decrease lights when it get's lighter 
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.living_room_lux
+    above: 7000
+  - platform: time
+    minutes: '/2'
+    seconds: 0
+  condition:
+  - condition: numeric_state
+    entity_id: sensor.living_room_lux
+    above: 7000
+  - condition: state
+    entity_id: group.all_devices
+    state: 'home'
+  - condition: state
+    entity_id: input_boolean.sleeping
+    state: 'off'
+  - condition: numeric_state
+    entity_id: light.living_room
+    value_template: '{{ states.light.living_room.attributes.brightness }}'
+    above: 10
+  action:
+    - service: light.turn_on
+      entity_id: light.living_room 
+      data_template:
+        brightness: '{{states.light.living_room.attributes.brightness - 10}}'
+        transition: 60
+
+
+
+
+- alias: Stops lights when it get's lighter 
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.living_room_lux
+    above: 7000
+  - platform: time
+    minutes: '/2'
+    seconds: 0
+  condition:
+  - condition: numeric_state
+    entity_id: sensor.living_room_lux
+    above: 7000
+  - condition: state
+    entity_id: group.all_devices
+    state: 'home'
+  - condition: state
+    entity_id: input_boolean.sleeping
+    state: 'off'
+  - condition: numeric_state
+    entity_id: light.living_room
+    value_template: '{{ states.light.living_room.attributes.brightness }}'
+    below: 10
+  action:
+    - service: light.turn_off
+      entity_id: light.living_room 
+      data:
+        transition: 60

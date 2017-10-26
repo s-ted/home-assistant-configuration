@@ -1,0 +1,57 @@
+homeassistant:
+  customize:
+    switch.twitch:
+      friendly_name: Twitch Alerts
+      icon: mdi:twitch
+
+sensor:
+  - platform: twitch
+    entity_namespace: twitch
+    channels:
+      - chessbrah
+
+switch:
+  - platform: mqtt
+    name: 'Twitch'
+    state_topic: 'twitch/enabled'
+    command_topic: 'twitch/enabled'
+    qos: 1
+    payload_on: 'yes'
+    payload_off: 'no'
+    retain: true
+
+group:
+  Twitch:
+    - sensor.twitch_chessbrah
+    - switch.twitch
+
+automation:
+  - alias: Streaming
+    trigger:
+      platform: state
+      entity_id:
+        - sensor.twitch_chessbrah
+      to: 'streaming'
+      for:
+        seconds: 30
+    condition:
+      - condition: state
+        entity_id: group.all_devices
+        state: 'home'
+      - condition: state
+        entity_id: input_boolean.sleeping
+        state: 'off'
+      - condition: state
+        entity_id: switch.twitch
+        state: 'yes'
+    action:
+      - service: notify.html5_nexus5
+        data_template:
+          message: >
+            {{ trigger.to_state.attributes.friendly_name }} is streaming
+      - service: tts.google
+        entity_id: media_player.mpd
+        data_template:
+          language: 'en'
+          message: >
+            {{ trigger.to_state.attributes.friendly_name }} is streaming

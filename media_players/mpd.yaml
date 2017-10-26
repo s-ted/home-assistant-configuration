@@ -1,0 +1,2 @@
+- platform: mpd
+  host: 172.17.0.1

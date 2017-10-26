@@ -1,0 +1,34 @@
+- alias: "Presence detected during night, light red lights"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.living_room_motion
+      to: 'on'
+      from: 'off'
+  condition:
+    - condition: state
+      entity_id: input_boolean.sleeping
+      state: 'on'
+    - condition: state
+      entity_id: group.all_devices
+      state: 'home'
+    - condition: time
+      after: '01:00:00'
+      before: '06:50:00'
+  action:
+    - service: light.turn_on 
+      entity_id: light.living_room 
+      data:
+        brightness: 1
+        color_name: 'red'
+    - delay: 00:00:02
+    - service: light.turn_on 
+      entity_id: light.living_room 
+      data:
+        brightness: 125
+        color_name: 'red'
+        transition: 15
+    - delay: 00:05:00
+    - service: light.turn_off 
+      entity_id: light.living_room 
+      data:
+        transition: 300

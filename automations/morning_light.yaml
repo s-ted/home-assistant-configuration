@@ -1,0 +1,73 @@
+- alias: Morning lighting workday
+  trigger:
+    - platform: time
+      at: '06:30:00'
+  condition:
+    - condition: time
+      weekday:
+        - mon
+        - tue
+        - wed
+        - thu
+        - fri
+    - condition: state
+      entity_id: input_boolean.sleeping
+      state: 'on'
+  action:
+    - service: light.turn_on 
+      entity_id: light.bedroom 
+      data:
+        brightness: 1
+        kelvin: 2200
+    - delay: 00:00:10
+    - service: light.turn_on 
+      entity_id: light.bedroom 
+      data:
+        brightness: 125
+        kelvin: 2200
+        transition: 900
+    - delay: 00:15:00 
+    - service: light.turn_on 
+      entity_id: light.bedroom 
+      data:
+        brightness: 255
+        kelvin: 6500
+        transition: 900
+
+
+
+
+- alias: Morning lighting weekend
+  trigger:
+    - platform: time
+      at: '09:30:00'
+  condition:
+    - condition: time
+      weekday:
+        - fri
+        - sat
+        - sun
+    - condition: state
+      entity_id: input_boolean.sleeping
+      state: 'on'
+  action:
+    - service: light.turn_on 
+      entity_id: light.bedroom 
+      data:
+        brightness: 1
+        kelvin: 2200
+    - delay: 00:00:10
+    - service: light.turn_on 
+      entity_id: light.bedroom 
+      data:
+        brightness: 125
+        kelvin: 2200
+        transition: 900
+    - delay: 00:15:00 
+    - service: light.turn_on 
+      entity_id: light.bedroom 
+      data:
+        brightness: 255
+        kelvin: 6500
+        transition: 900
+

@@ -1,0 +1,7 @@
+#- platform: local_file
+#  name: Salon Camera
+#  file_path: /config/webcam/lastsnap.jpg
+#- platform: ffmpeg_motion
+#  input: tcp://172.17.0.1:8082
+#  changes: 1
+#  repeat: 1

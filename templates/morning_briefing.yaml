@@ -1,0 +1,10 @@
+>
+  {% if now().strftime("%H")|int < 18 %}
+  Bonjour.
+  {% else %}
+  Bonsoir.
+  {% endif %}
+
+  La météo prévoit {{states.sensor.dark_sky_hourly_summary.state|replace(".", "")}}, avec une température maximale de {{states.sensor.dark_sky_daily_high_temperature.state|round}} °C. Il fait actuellement {{states.sensor.dark_sky_temperature.state|round}} °C.
+
+

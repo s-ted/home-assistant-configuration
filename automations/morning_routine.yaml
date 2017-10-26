@@ -1,0 +1,110 @@
+- alias: Woke up time
+  trigger:
+    - platform: state
+      entity_id: input_boolean.sleeping
+      to: 'off'
+  action:
+    - service: light.turn_on 
+      entity_id: light.bedroom 
+      data:
+        brightness: 125
+        kelvin: 3500
+        transition: 60
+    - service: light.turn_on 
+      entity_id: light.living_room 
+      data:
+        brightness: 125
+        kelvin: 3500
+    - delay: 00:01:00
+    - service: light.turn_off 
+      entity_id: light.bedroom 
+      data:
+        transition: 60
+    - service: light.turn_on 
+      entity_id: light.living_room 
+      data_template:
+        brightness: '{{states.light.living_room.attributes.brightness}}'
+        kelvin: 6500
+        transition: 900
+    - delay: 00:15:00
+    - service: light.turn_on 
+      entity_id: light.living_room 
+      data_template:
+        brightness: '{{states.light.living_room.attributes.brightness}}'
+        kelvin: 4000
+        transition: 15
+
+
+
+
+- alias: "Presence detected at woke up"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.living_room_motion
+      to: 'on'
+      from: 'off'
+  condition:
+    - condition: state
+      entity_id: input_boolean.sleeping
+      state: 'on'
+    - condition: state
+      entity_id: group.all_devices
+      state: 'home'
+    - condition: time
+      after: '06:50:00'
+      before: '15:00:00'
+  action:
+    - service: input_boolean.turn_off 
+      entity_id: input_boolean.sleeping
+
+
+
+- alias: Shower time
+  trigger:
+    - platform: time
+      at: '08:00:00'
+  condition:
+    - condition: state
+      entity_id: input_boolean.sleeping
+      state: 'off'
+    - condition: state
+      entity_id: group.all_devices
+      state: 'home'
+  action:
+    - service: light.turn_on 
+      entity_id: light.living_room 
+      data:
+        flash: short
+
+- alias: Leave time
+  trigger:
+    - platform: time
+      at: '08:30:00'
+  condition:
+    - condition: state
+      entity_id: input_boolean.sleeping
+      state: 'off'
+    - condition: state
+      entity_id: group.all_devices
+      state: 'home'
+  action:
+    - service: light.turn_on 
+      entity_id: light.living_room 
+      data:
+        flash: short
+
+
+- alias: Briefing 
+  trigger:
+    - platform: time
+      at: '07:50:00'
+  condition:
+    - condition: state
+      entity_id: input_boolean.sleeping
+      state: 'off'
+    - condition: state
+      entity_id: group.all_devices
+      state: 'home'
+  action:
+    - service: homeassistant.turn_on
+      entity_id: script.morning_briefing 

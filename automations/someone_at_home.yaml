@@ -1,0 +1,18 @@
+- alias: Turn on lights when anyone gets home
+  trigger:
+    - platform: state
+      entity_id: group.all_devices
+      to: 'home'
+  condition:
+    - condition: state
+      entity_id: group.all_devices
+      state: 'home'
+    - condition: state
+      entity_id: input_boolean.sleeping
+      state: 'off'
+    - condition: state
+      entity_id: media_player.kodi
+      state: 'idle'
+  action:
+    - service: scene.turn_on
+      entity_id: scene.living_room_normal

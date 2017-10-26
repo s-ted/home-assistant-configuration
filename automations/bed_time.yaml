@@ -1,0 +1,28 @@
+- alias: Bed time
+  trigger:
+    - platform: time
+      at: '22:45:00'
+  condition:
+    - condition: state
+      entity_id: input_boolean.sleeping
+      state: 'off'
+    - condition: state
+      entity_id: group.all_devices
+      state: 'home'
+  action:
+    - service: light.turn_on 
+      entity_id: light.living_room 
+      data:
+        flash: short
+    - delay: 00:00:10
+    - service: light.turn_on 
+      entity_id: light.living_room 
+      data:
+        brightness: 125
+        kelvin: 2200
+        transition: 900
+    - delay: 00:15:00
+    - service: light.turn_on 
+      entity_id: light.living_room 
+      data:
+        flash: short

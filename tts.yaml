@@ -1,0 +1,4 @@
+- platform: google
+  language: 'fr'
+  cache: true
+  base_url: !secret base_url 

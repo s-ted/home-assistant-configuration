@@ -1,0 +1,5 @@
+#- platform: owntracks
+#  max_gps_accuracy: 300
+#  waypoints: true
+#  waypoint_whitelist:
+#    - ted

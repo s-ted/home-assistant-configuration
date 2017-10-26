@@ -1,181 +1,61 @@
+# https://github.com/happyleavesaoc/my-home-automation/tree/master/homeassistant/packages
 homeassistant:
   # Name of the location where Home Assistant is running
   name: Home
   # Location required to calculate the time the sun rises and sets
-  latitude: 45
-  longitude: 5
+  latitude: !secret latitude
+  longitude: !secret longitude
   # Impacts weather/sunrise data (altitude above sea level in meters)
-  elevation: 150
+  elevation: !secret elevation
   # metric for Metric, imperial for Imperial
   unit_system: metric
   # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-  time_zone: Europe/Paris
+  time_zone: !secret time_zone 
+  #customize: !include customize.yaml
+  packages: !include_dir_named packages
 
-# Enables the frontend
+
+
+automation: !include_dir_merge_list automations
+camera: !include_dir_merge_list cameras
+binary_sensor: !include_dir_merge_list binary_sensors
+device_tracker: !include_dir_merge_list device_trackers
+group: !include_dir_merge_named groups
+input_boolean: !include_dir_merge_named input_booleans
+intent_script: !include_dir_merge_named intent_scripts
+light: !include_dir_merge_list lights
+notify: !include_dir_merge_list notifications
+media_player: !include_dir_merge_list media_players
+scene: !include_dir_merge_list scenes
+sensor: !include_dir_merge_list sensors
+switch: !include_dir_merge_list switches
+script: !include_dir_merge_named scripts
+
+logger: !include logger.yaml
+logbook: !include logbook.yaml
+tts: !include tts.yaml
+
+
+
+sun:
 frontend:
-
-# Enables configuration UI
+history:
 config:
+
+wake_on_lan:
+snips:
 
 http:
   # Uncomment this to add a password (recommended!)
-  #api_password: REDACTED
+  api_password: !secret api_password 
   # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
-  #base_url: https://REDACTED
-
-# Checks for available updates
-# Note: This component will send some information about your system to
-# the developers to assist with development of Home Assistant.
-# For more information, please see:
-# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
-#updater:
-#  # Optional, allows Home Assistant developers to focus on popular components.
-#  # include_used_components: true
-
-# Discover some devices automatically
-#discovery:
-
-# Allows you to issue voice commands from the frontend in enabled browsers
-#conversation:
-
-# Enables support for tracking state changes over time
-history:
-
-# View all events in a logbook
-logbook:
-
-# Track the sun
-sun:
-
-# Weather prediction
-sensor:
-  - platform: yr
-    monitored_conditions:
-      - temperature
-      - symbol
-      - precipitation
-      - windSpeed
-      - humidity
-
-  - platform: yweather
-    forecast: 0
-    name: Today forecast
-    monitored_conditions:
-      - weather
-      - temp_min
-      - temp_max
-
-  - platform: mqtt
-    state_topic: "owntracks/ted/nexus5"
-    name: "Battery Nexus 5"
-    unit_of_measurement: "%"
-    value_template: '{{ value_json.batt }}'
-
-  - platform: rest
-    resource: http://192.168.2.6/api/REDACTED/sensors/4
-    value_template: '{{ value_json.state.lightlevel }}'
-    unit_of_measurement: Lux
-    name: 'Living Room Lux'
-
-  - platform: rest
-    resource: http://192.168.2.6/api/REDACTED/sensors/2
-    value_template: '{{ value_json.state.temperature | float / 100 }}'
-    unit_of_measurement: °C
-    name: 'Living Room Temperature'
-
-
-# Text to speech
-tts:
-  - platform: google
-    language: 'fr'
-
-apiai:
-
-intent_script:
-  outdoor.temperature.current:
-    speech:
-      text: Il fait actuellement {{ states.sensor.yr_temperature.state }} {{ states.sensor.yr_temperature.attributes.unit_of_measurement }}.
-
-
-group: !include groups.yaml
-automation: !include automations.yaml
-scene: !include scenes.yaml
+  base_url: !secret base_url
 
 
 
-
-media_player:
- - platform: kodi
-   host: 172.17.0.1
-   turn_on_action:
-     service: media_player.kodi_call_method
-     data:
-       entity_id: media_player.kodi
-       method: Addons.ExecuteAddon
-       addonid: script.json-cec
-       params:
-         command: activate
-   turn_off_action:
-   - service: media_player.media_stop
-     data:
-       entity_id: media_player.kodi
-   - service: media_player.kodi_call_method
-     data:
-       entity_id: media_player.kodi
-       method: Addons.ExecuteAddon
-       addonid: script.json-cec
-       params:
-         command: standby
-
-
-device_tracker:
- - platform: owntracks
-   max_gps_accuracy: 300
-   waypoints: true
-   waypoint_whitelist:
-     - ted
-
-
-mqtt:
-  broker: 172.17.0.1
-  username: homeassistant
-  password: REDACTED
-
-
-
-
-wake_on_lan:
-
-notify:
-  - platform: html5
-    gcm_api_key: 'REDACTED'
-    gcm_sender_id: 'REDACTED'
-
-
-camera:
-  - platform: local_file
-    name: Salon Camera
-    file_path: /config/webcam/lastsnap.jpg
-#  - platform: ffmpeg_motion
-#    input: tcp://172.17.0.1:8082
-#    changes: 1
-#    repeat: 1
-
-
-binary_sensor:
-  - platform: rest
-    resource: http://192.168.2.6/api/REDACTED/sensors/3
-    value_template: '{{ value_json.state.presence }}'
-    name: 'Living Room Motion'
-
-input_boolean:
-  sleeping:
-          initial: off
-          icon: mdi:hotel
-
-
-light:
-  - platform: hue
-    host: 192.168.2.6
-
-
+# TODO: google calendar
+  # - morning briefing on event
+# TODO: moring briefing on rain
+# TODO: previous day briefing on event if not at home 
+# TODO: tea timer (+ snips)
+# TODO: turn off kitchen when kodi plays

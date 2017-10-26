@@ -1,0 +1,4 @@
+- platform: rest
+  resource: !secret hue_motion_living_room
+  value_template: '{{ value_json.state.presence }}'
+  name: 'Living Room Motion'

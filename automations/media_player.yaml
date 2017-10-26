@@ -1,0 +1,39 @@
+- alias: "Media player paused/stopped"
+  trigger:
+    - platform: state
+      entity_id: media_player.kodi
+      from: 'playing'
+  condition:
+    - condition: state
+      entity_id: sun.sun
+      state: 'below_horizon'
+    - condition: numeric_state
+      entity_id: sensor.living_room_lux
+      below: 6000
+    - condition: state
+      entity_id: group.all_devices
+      state: 'home'
+  action:
+      service: scene.turn_on
+      entity_id: scene.living_room_normal
+
+
+
+
+
+- alias: "Media player playing"
+  trigger:
+    - platform: state
+      entity_id: media_player.kodi
+      to: 'playing'
+  condition:
+    - condition: state
+      entity_id: sun.sun
+      state: 'below_horizon'
+    - condition: state
+      entity_id: group.all_devices
+      state: 'home'
+  action:
+      service: scene.turn_on
+      entity_id: scene.living_room_dim
+
