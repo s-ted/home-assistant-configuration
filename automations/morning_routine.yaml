@@ -108,3 +108,71 @@
   action:
     - service: homeassistant.turn_on
       entity_id: script.morning_briefing 
+
+
+
+- alias: "Presence detected during morning, kitchen on"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.living_room_motion
+      to: 'on'
+      from: 'off'
+  condition:
+    - condition: state
+      entity_id: input_boolean.sleeping
+      state: 'off'
+    - condition: state
+      entity_id: group.all_devices
+      state: 'home'
+    - condition: state
+      entity_id: light.kitchen
+      state: 'off'
+    - condition: time
+      weekday:
+        - mon
+        - tue
+        - wed
+        - thu
+        - fri
+    - condition: time
+      after: '06:00:00'
+      before: '08:00:00'
+  action:
+    - service: light.turn_on 
+      entity_id: light.kitchen 
+      data:
+        transition: 2
+        brightness: 185
+
+- alias: "Presence detected during morning, kitchen off"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.living_room_motion
+      to: 'on'
+      from: 'off'
+  condition:
+    - condition: state
+      entity_id: input_boolean.sleeping
+      state: 'off'
+    - condition: state
+      entity_id: group.all_devices
+      state: 'home'
+    - condition: state
+      entity_id: light.kitchen
+      state: 'on'
+    - condition: time
+      weekday:
+        - mon
+        - tue
+        - wed
+        - thu
+        - fri
+    - condition: time
+      after: '06:00:00'
+      before: '08:00:00'
+  action:
+    - service: light.turn_off 
+      entity_id: light.kitchen 
+      data:
+        transition: 0
+

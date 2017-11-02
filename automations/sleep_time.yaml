@@ -6,6 +6,8 @@
   action:
     - service: media_player.media_stop
       entity_id: media_player.kodi
+    - service: switch.turn_off
+      entity_id: switch.sonoff_04e7cf
     - service: light.turn_on 
       entity_id: light.bedroom 
       data:
@@ -28,3 +30,15 @@
       entity_id: light.bedroom 
       data:
         transition: 300
+
+- alias: Sleep time soon
+  trigger:
+    - platform: state
+      entity_id: switch.turn_on_pc
+      to: 'off'
+  condition:
+    - condition: time
+      after: '22:00:00'
+  action:
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.sleeping

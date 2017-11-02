@@ -19,3 +19,23 @@
       addonid: script.json-cec
       params:
         command: standby
+
+
+- platform: universal
+  name: living_room
+
+  children:
+    - media_player.kodi
+
+  commands:
+    turn_on:
+      service: switch.turn_on
+      data:
+        entity_id: switch.sonoff_04e7cf
+    turn_off:
+      service: switch.turn_off
+      data:
+        entity_id: switch.sonoff_04e7cf
+
+  attributes:
+    state: switch.sonoff_04e7cf

@@ -1,0 +1,20 @@
+#homeassistant:
+#  customize:
+#    sensor.colis_cable_sata:
+#      icon: mdi:package-variant-closed
+#
+#    sensor.colis:
+#      friendly_name: Colis 
+#      icon: mdi:package-variant-closed
+
+#group:
+#        Packages:
+#                - sensor.colis
+#                - sensor.colis_cable_sata
+
+
+#sensor:
+#  - platform: scrape
+#    name: Colis
+#    resource: https://www.laposte.fr/particulier/outils/suivre-vos-envois?code=6Y01234567890
+#    select: 'table.table-bordered tbody tr:nth-of-type(1) td:nth-of-type(2) p'

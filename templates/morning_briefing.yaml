@@ -1,4 +1,6 @@
 >
+  {% set offset = 12 %}
+
   {% if now().strftime("%H")|int < 18 %}
   Bonjour.
   {% else %}
@@ -7,4 +9,55 @@
 
   La météo prévoit {{states.sensor.dark_sky_hourly_summary.state|replace(".", "")}}, avec une température maximale de {{states.sensor.dark_sky_daily_high_temperature.state|round}} °C. Il fait actuellement {{states.sensor.dark_sky_temperature.state|round}} °C.
 
+
+  {# Personal calendar #}
+  {% set next_event = states.calendar.perso.attributes %}
+  {% set next_event_timestamp_to_now = strptime(next_event.start_time, '%Y-%m-%d %H:%M:%S').timestamp() - now().timestamp() %}
+  {% if next_event_timestamp_to_now / 3600 < offset %}
+    L'événement perso "{{next_event.message}}" est prévu pour dans
+    {% if next_event_timestamp_to_now / 3600 > 1 %}
+      {{(next_event_timestamp_to_now / 3600) | int}} heures et
+    {% endif %}
+    {{(next_event_timestamp_to_now % 3600 / 60) | int}} minutes.
+  {% endif %}
+
+  {# Work calendar #}
+  {% set next_event = states.calendar.lkndesign.attributes %}
+  {% set next_event_timestamp_to_now = strptime(next_event.start_time, '%Y-%m-%d %H:%M:%S').timestamp() - now().timestamp() %}
+  {% if next_event_timestamp_to_now / 3600 < offset %}
+    L'événement de travail  "{{next_event.message}}" est prévu pour dans
+    {% if next_event_timestamp_to_now / 3600 > 1 %}
+      {{(next_event_timestamp_to_now / 3600) | int}} heures et
+    {% endif %}
+    {{(next_event_timestamp_to_now % 3600 / 60) | int}} minutes.
+  {% endif %}
+
+  {# Sup2Pub perso calendar #}
+  {% set next_event = states.calendar.s2p_ted.attributes %}
+  {% set next_event_timestamp_to_now = strptime(next_event.start_time, '%Y-%m-%d %H:%M:%S').timestamp() - now().timestamp() %}
+  {% if next_event_timestamp_to_now / 3600 < offset %}
+    Le cours "{{next_event.message.split('-')[0]}}" pour les "{{next_event.message.split('-')[1].split(' ')[1]}}" est prévu pour dans
+    {% if next_event_timestamp_to_now / 3600 > 1 %}
+      {{(next_event_timestamp_to_now / 3600) | int}} heures et
+    {% endif %}
+    {{(next_event_timestamp_to_now % 3600 / 60) | int}} minutes.
+  {% endif %}
+
+  {# Sup2Pub Miguel calendar #}
+  {% set next_event = states.calendar.s2p_miguel.attributes %}
+  {% set next_event_timestamp_to_now = strptime(next_event.start_time, '%Y-%m-%d %H:%M:%S').timestamp() - now().timestamp() %}
+  {% if next_event_timestamp_to_now / 3600 < offset %}
+    Miguel a un cours "{{next_event.message.split('-')[0]}}" pour les "{{next_event.message.split('-')[1].split(' ')[1]}}" de prévu pour dans
+    {% if next_event_timestamp_to_now / 3600 > 1 %}
+      {{(next_event_timestamp_to_now / 3600) | int}} heures et
+    {% endif %}
+    {{(next_event_timestamp_to_now % 3600 / 60) | int}} minutes.
+  {% endif %}
+
+  {# Birthdays calendar #}
+  {% set next_event = states.calendar.birthdays.attributes %}
+  {% set next_event_timestamp_to_now = strptime(next_event.start_time, '%Y-%m-%d %H:%M:%S').timestamp() - now().timestamp() %}
+  {% if next_event_timestamp_to_now / 3600 < offset %}
+    C'est l'anniversaire de {{next_event.message.split("'")[0]}} !
+  {% endif %}
 

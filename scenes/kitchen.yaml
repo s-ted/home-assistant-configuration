@@ -1,0 +1,12 @@
+- name: Kitchen on
+  entities:
+      light.kitchen:
+          state: on
+          transition: 5
+          brightness: 125
+
+- name: Kitchen off
+  entities:
+      light.kitchen:
+          state: off
+          transition: 3

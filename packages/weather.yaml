@@ -123,6 +123,7 @@ sensor:
                   - hourly_summary
                   - humidity
                   - nearest_storm_distance
+                  - precip_intensity_max
                   - summary
                   - temperature
                   - temperature_max
